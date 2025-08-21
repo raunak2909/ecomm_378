@@ -1,0 +1,19 @@
+import 'package:ecomm_378/ui/login/login_screen.dart';
+import 'package:flutter/material.dart';
+
+import '../../ui/sign_up/signup_screen.dart';
+import '../../ui/splash/splash_page.dart';
+
+class AppRoutes {
+  static const String login = '/login';
+  static const String signup = '/signup';
+  static const String splash = '/splash';
+  static const String dashboard = '/dashboard';
+
+  static Map<String, WidgetBuilder> routes = {
+    login: (context) => LoginScreen(),
+    signup: (context) => SignupScreen(),
+    splash: (context) => SplashPage(),
+    dashboard: (context) => Scaffold(),
+  };
+}
