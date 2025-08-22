@@ -13,3 +13,10 @@ class UserRegisterEvent extends UserEvent {
     required this.password,
   });
 }
+
+class UserLoginEvent extends UserEvent {
+  String email;
+  String pass;
+
+  UserLoginEvent({required this.email, required this.pass});
+}

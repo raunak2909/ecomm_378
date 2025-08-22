@@ -1,4 +1,8 @@
+import 'package:ecomm_378/ui/sign_up/bloc/user_bloc.dart';
+import 'package:ecomm_378/ui/sign_up/bloc/user_event.dart';
+import 'package:ecomm_378/ui/sign_up/bloc/user_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/constants/app_routes.dart';
 import '../app_widgets/authfield.dart';
@@ -7,6 +11,7 @@ import '../app_widgets/primary_button.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
@@ -15,6 +20,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final email = TextEditingController();
   final pass = TextEditingController();
   bool remember = true;
+  bool isLoading = false;
+  bool isLogin = true;
 
   @override
   Widget build(BuildContext context) {
@@ -28,17 +35,24 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 12),
-                Text('Welcome Back 👋',
-                    style: const TextStyle(
-                        fontSize: 26, fontWeight: FontWeight.w800)),
+                Text(
+                  'Welcome Back 👋',
+                  style: const TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
                 const SizedBox(height: 6),
-                Text('Sign in to continue shopping',
-                    style: TextStyle(color: Colors.black54)),
+                Text(
+                  'Sign in to continue shopping',
+                  style: TextStyle(color: Colors.black54),
+                ),
                 const SizedBox(height: 24),
                 AuthField(
-                    hint: 'Email',
-                    keyboard: TextInputType.emailAddress,
-                    controller: email),
+                  hint: 'Email',
+                  keyboard: TextInputType.emailAddress,
+                  controller: email,
+                ),
                 const SizedBox(height: 14),
                 AuthField(hint: 'Password', controller: pass, isPassword: true),
                 const SizedBox(height: 10),
@@ -58,10 +72,49 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
                 const SizedBox(height: 8),
-                PrimaryButton(
-                  label: 'Login',
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(context, AppRoutes.dashboard);
+                BlocConsumer<UserBloc, UserState>(
+                  listenWhen: (cs, ps){
+                    return isLogin;
+                  },
+                  buildWhen: (cs, ps){
+                    return isLogin;
+                  },
+                  listener: (_, state) {
+                    if (state is UserLoadingState) {
+                      isLoading = true;
+                    }
+
+                    if (state is UserSuccessState) {
+                      isLoading = false;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Login Successfully'),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                      Navigator.pushNamed(context, AppRoutes.dashboard);
+                    }
+
+                    if (state is UserFailureState) {
+                      isLoading = false;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Error : ${state.errorMsg}'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                  },
+                  builder: (context, state) {
+                    return PrimaryButton(
+                      label: isLoading ? "Please wait.." : 'Login',
+                      onPressed: () {
+                        isLogin = true;
+                        context.read<UserBloc>().add(
+                          UserLoginEvent(email: email.text, pass: pass.text),
+                        );
+                      },
+                    );
                   },
                 ),
                 const SizedBox(height: 18),
@@ -83,11 +136,17 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     const Text("Don't have an account? "),
                     GestureDetector(
-                      onTap: () => Navigator.pushNamed(
-                          context, AppRoutes.signup),
-                      child: Text('Sign Up',
-                          style: TextStyle(
-                              color: cs.primary, fontWeight: FontWeight.w700)),
+                      onTap: () {
+                        Navigator.pushNamed(context, AppRoutes.signup);
+                        isLogin = false;
+                      },
+                      child: Text(
+                        'Sign Up',
+                        style: TextStyle(
+                          color: cs.primary,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -108,7 +167,10 @@ class _LoginScreenState extends State<LoginScreen> {
           borderRadius: BorderRadius.circular(14),
           boxShadow: const [
             BoxShadow(
-                color: Colors.black12, blurRadius: 8, offset: Offset(0, 4))
+              color: Colors.black12,
+              blurRadius: 8,
+              offset: Offset(0, 4),
+            ),
           ],
         ),
         child: Center(

@@ -12,7 +12,7 @@ class UserRepo {
     required String name,
     required String mobNo,
     required String password,
-  }) async{
+  }) async {
     try {
       return await apiHelper.postApi(
         url: AppUrls.registrationUrl,
@@ -29,4 +29,17 @@ class UserRepo {
   }
 
   ///loginUser
+  Future<dynamic> loginUser({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      return await apiHelper.postApi(
+        url: AppUrls.loginUrl,
+        bodyParams: {"email": email, "password": password},
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
