@@ -22,7 +22,7 @@ class ApiHelper {
     required String url,
     Map<String, dynamic>? bodyParams,
     bool isAuth = false,
-    Map<String, dynamic>? headers,
+    Map<String, String>? headers,
   }) async {
 
     if(!isAuth){
@@ -38,6 +38,7 @@ class ApiHelper {
       http.Response response = await http.post(
         Uri.parse(url),
         body: bodyParams != null ? jsonEncode(bodyParams) : null,
+        headers: headers
       );
       return returnResponse(response);
     } on SocketException catch (e) {

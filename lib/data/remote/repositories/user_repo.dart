@@ -15,6 +15,7 @@ class UserRepo {
   }) async {
     try {
       return await apiHelper.postApi(
+        isAuth: true,
         url: AppUrls.registrationUrl,
         bodyParams: {
           "name": name,
@@ -35,6 +36,7 @@ class UserRepo {
   }) async {
     try {
       return await apiHelper.postApi(
+        isAuth: true,
         url: AppUrls.loginUrl,
         bodyParams: {"email": email, "password": password},
       );

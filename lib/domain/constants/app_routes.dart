@@ -1,6 +1,8 @@
+import 'package:ecomm_378/ui/dashboard/home_page.dart';
 import 'package:ecomm_378/ui/login/login_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../../ui/dashboard/home_screen(1).dart';
 import '../../ui/sign_up/signup_screen.dart';
 import '../../ui/splash/splash_page.dart';
 
@@ -14,6 +16,6 @@ class AppRoutes {
     login: (context) => LoginScreen(),
     signup: (context) => SignupScreen(),
     splash: (context) => SplashPage(),
-    dashboard: (context) => Scaffold(),
+    dashboard: (context) => ShopHomePage(),
   };
 }
