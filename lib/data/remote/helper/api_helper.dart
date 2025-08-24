@@ -8,9 +8,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiHelper {
   ///get
-  dynamic getApi({required String url}) async {
+  dynamic getApi({required String url, bool isAuth = false, Map<String, String>? headers,}) async {
+
+    if(!isAuth){
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String token = prefs.getString(AppConstants.PREF_KEY_USER_TOKEN) ?? "";
+
+      headers ??= {};
+      headers["Authorization"] = "Bearer $token";
+    }
+
     try {
-      http.Response response = await http.get(Uri.parse(url));
+      http.Response response = await http.get(Uri.parse(url), headers: headers);
       return returnResponse(response);
     } on SocketException catch (e) {
       throw NoInternetException(desc: e.message);

@@ -1,7 +1,9 @@
+import 'package:ecomm_378/data/remote/repositories/cart_repo.dart';
 import 'package:ecomm_378/data/remote/repositories/product_repo.dart';
 import 'package:ecomm_378/data/remote/repositories/user_repo.dart';
 import 'package:ecomm_378/domain/constants/app_routes.dart';
 import 'package:ecomm_378/ui/dashboard/bloc/product_bloc.dart';
+import 'package:ecomm_378/ui/product_detail/bloc/cart_bloc.dart';
 import 'package:ecomm_378/ui/sign_up/bloc/user_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,6 +22,10 @@ void main() {
           create: (context) => ProductBloc(
             productRepository: ProductRepository(apiHelper: ApiHelper()),
           ),
+        ),
+        BlocProvider(
+          create: (context) =>
+              CartBloc(cartRepository: CartRepository(apiHelper: ApiHelper())),
         ),
       ],
       child: MyApp(),

@@ -1,6 +1,6 @@
 
 import 'package:ecomm_378/data/remote/models/product_model.dart';
-import 'package:ecomm_378/ui/dashboard/products.dart';
+import 'package:ecomm_378/ui/app_widgets/products.dart';
 import 'package:flutter/material.dart';
 
 class ProductCard extends StatefulWidget {
@@ -79,11 +79,11 @@ class ProductCardState extends State<ProductCard> {
                     const TextStyle(fontWeight: FontWeight.w800, fontSize: 14)),
           ),
           const SizedBox(height: 6),
-          /*Padding(
+          Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             child: Row(
               children: List.generate(
-                p.colors.length.clamp(0, 5),
+                Colors.primaries.length.clamp(0, 5),
                 (i) => GestureDetector(
                   onTap: () => setState(() => selectedColor = i),
                   child: Container(
@@ -100,13 +100,13 @@ class ProductCardState extends State<ProductCard> {
                     ),
                     child: CircleAvatar(
                       radius: 7,
-                      backgroundColor: p.colors[i],
+                      backgroundColor: Colors.primaries[i],
                     ),
                   ),
                 ),
               ),
             ),
-          ),*/
+          ),
         ],
       ),
     );
